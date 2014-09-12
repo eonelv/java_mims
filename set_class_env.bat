@@ -1,0 +1,1 @@
+set classpath=%classpath%;C:\Users\lv\Desktop\java\tools\e1effsyn.jar;C:\Users\lv\Desktop\java\lib\e1asbuilder_utils.jar;C:\Users\lv\Desktop\java\lib\e1asbuiler_server.jar;C:\Users\lv\Desktop\java\lib\mims-core.jar;C:\Users\lv\Desktop\java\lib\mims-swing.jar;
