@@ -12,9 +12,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import e1.tools.lzma.sevenzip.compression.lzma.Encoder;
@@ -36,8 +39,8 @@ public class CreateAMF
 		System.out.println("AMF Process finished!");
 	}
 	
-	private  SerializationContext context =  new  SerializationContext(); 
-	List<File> files = new ArrayList<File>();
+	private SerializationContext context =  new  SerializationContext(); 
+	private List<File> files = new ArrayList<File>();
 	
 	public void process(String srcFolderName)
 	{
@@ -242,7 +245,10 @@ public class CreateAMF
 		}
 		try 
 		{
-			json = JSONObject.fromObject(sb.toString());
+			JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+			Map<Object, Object> resultJson = new HashMap<Object, Object>();
+			getJsonObject(jsonObject, resultJson);
+			json = resultJson;
 		}
 		catch (JSONException e)
 		{
@@ -264,5 +270,56 @@ public class CreateAMF
 		return json;
 	}
 	
+	private void getJsonObject(JSONObject jsonObject, Map<Object, Object> resultJson)
+	{
+		Iterator it = jsonObject.keys();
+		Object value;
+		Object key;
+		while (it.hasNext())
+		{
+			key = it.next();
+			value = jsonObject.get(key);
+			
+			if (value instanceof JSONObject)
+			{
+				Map<Object, Object> tempResult = new HashMap<Object, Object>();
+				getJsonObject((JSONObject)value, tempResult);
+				resultJson.put(key, tempResult);
+			}
+			else if (value instanceof JSONArray)
+			{
+				JSONArray array = (JSONArray)value;
+				getJsonArray(array, key, resultJson);
+			}
+			else 
+			{
+				resultJson.put(key, value);
+			}
+		}
+	}
+	
+	private void getJsonArray(JSONArray array, Object key, Map<Object, Object> resultJson)
+	{
+		Iterator itArray = array.iterator();
+		
+		List<Object> tempField = new ArrayList<Object>(); 
+		
+		Object arrayItem;
+		while (itArray.hasNext())
+		{
+			arrayItem = itArray.next();
+			if (arrayItem instanceof JSONObject)
+			{
+				Map<Object, Object> tempResult = new HashMap<Object, Object>();
+				getJsonObject((JSONObject)arrayItem, tempResult);
+				tempField.add(tempResult);
+			}
+			else
+			{
+				tempField.add(arrayItem);
+			}
+		}
+		resultJson.put(key, tempField.toArray());
+	}
 
 }
