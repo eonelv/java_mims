@@ -34,26 +34,42 @@ public class CreateAMF
 	{
 		System.out.println(args[0]);
 		CreateAMF amf = new CreateAMF();
-		amf.process(args[0]);
+		try {
+			amf.process(args[0]);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("AMF Process finished!");
 	}
 	
 	private SerializationContext context =  new  SerializationContext(); 
 	private List<File> files = new ArrayList<File>();
+	private Encrypt encrypt;
+	private DataOutputStream dataPack;
 	
-	public void process(String srcFolderName)
+	public void process(String srcFolderName) throws Exception
 	{
+		initEncrypt();
+		
 		File srcFolder = new File(srcFolderName);
 		collFiles(srcFolder);
-		try 
-		{
-			processFiles(files);
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+		processFiles(files, srcFolderName);
+	}
+	
+	private void initEncrypt()
+	{
+		encrypt = new Encrypt();
+		encrypt.InitEncrypt(93,  32,  179, 50,  42,  116, 197, 86);
+	}
+	
+	public void create(File srcFile, String fileName) throws Exception
+	{
+		initEncrypt();
+		
+		Object srcJson = readFile(srcFile);
+		createAMFFile(srcJson, encrypt, new File(fileName));
 	}
 	
 	private void collFiles(File file)
@@ -73,16 +89,18 @@ public class CreateAMF
 		}
 	}
 	
-	private void processFiles(List<File> files) throws IOException
+	private void processFiles(List<File> files, String outputPath) throws Exception
 	{
 		Iterator<File> itFiles = files.iterator();
 		File srcFile;
 		String newFileFullName;
 		String oldFileName;
-		Encrypt encrypt = new Encrypt();
-		encrypt.InitEncrypt(93,  32,  179, 50,  42,  116, 197, 86);
+		
 		Amf3Output out = null;
 		Object srcJson = null;
+		
+		File packFile = new File(outputPath + "/respack.amp");
+		dataPack = new DataOutputStream(new FileOutputStream(packFile));
 		while (itFiles.hasNext())
 		{
 			srcFile = itFiles.next();
@@ -104,23 +122,37 @@ public class CreateAMF
 					return;
 				}
 			}
-			out = new Amf3Output(context);
+			byte[] input = createAMFFile(srcJson, encrypt, file);
 			
-			ByteArrayOutputStream byteOutPut = new ByteArrayOutputStream();
-			   
-		    DataOutputStream dataOutStream = new DataOutputStream(byteOutPut);
-		   
-		    out.setOutputStream(dataOutStream);   
-		    out.writeObject(srcJson);   
-		   
-		    dataOutStream.flush();
-		   
-		    byte[] input = byteOutPut.toByteArray();
-		    input = doCompressLzma(input);
-			encrypt.DoEncrypt(input, 0, input.length, false);
-			writeFile(file, input);
+			byte[] nameBytes = file.getName().getBytes("utf-8");
+			dataPack.writeInt(nameBytes.length);
+			dataPack.write(nameBytes);
+			dataPack.writeInt(input.length);
+			dataPack.write(input);
 		}
+		dataPack.flush();
+		dataPack.close();
+	}
+	
+	public byte[] createAMFFile(Object srcJson, Encrypt encrypt, File file) throws IOException
+	{
+		Amf3Output out = null;
+		out = new Amf3Output(context);
 		
+		ByteArrayOutputStream byteOutPut = new ByteArrayOutputStream();
+		   
+	    DataOutputStream dataOutStream = new DataOutputStream(byteOutPut);
+	   
+	    out.setOutputStream(dataOutStream);   
+	    out.writeObject(srcJson);   
+	   
+	    dataOutStream.flush();
+	   
+	    byte[] input = byteOutPut.toByteArray();
+	    input = doCompressLzma(input);
+		encrypt.DoEncrypt(input, 0, input.length, false);
+		writeFile(file, input);
+		return input;
 	}
 	
 	/**
@@ -175,13 +207,15 @@ public class CreateAMF
 		return outStream.toByteArray();
 	}
 	
-	private void writeFile(File file, byte[] datas) throws IOException
+	static private void writeFile(File file, byte[] datas) throws IOException
 	{
 		 DataOutputStream dataOutStream = new DataOutputStream(new FileOutputStream(file));
 		 dataOutStream.write(datas);
+		 dataOutStream.flush();
+		 dataOutStream.close();
 	}
 	
-	private Object readFile(File file) 
+	private Object readFile(File file) throws Exception 
 	{
 		Object json = null;
 		StringBuilder sb = new StringBuilder();
@@ -252,19 +286,26 @@ public class CreateAMF
 		}
 		catch (JSONException e)
 		{
-			String content = sb.toString();
-			int index = content.indexOf("[");
-			int lastIndex = content.lastIndexOf("]");
-			content = content.substring(index + 1, lastIndex);
-			String []arr = content.split(",");
-			int nameLength = arr.length;
-			String name;
-			for (int i = 0; i < nameLength; i++)
+			try 
 			{
-				name = arr[i];
-				arr[i] = name.substring(1, name.length() - 1);
+				String content = sb.toString();
+				int index = content.indexOf("[");
+				int lastIndex = content.lastIndexOf("]");
+				content = content.substring(index + 1, lastIndex);
+				String []arr = content.split(",");
+				int nameLength = arr.length;
+				String name;
+				for (int i = 0; i < nameLength; i++)
+				{
+					name = arr[i];
+					arr[i] = name.substring(1, name.length() - 1);
+				}
+				json = arr;
 			}
-			json = arr;
+			catch (Exception ep)
+			{
+				throw new Exception(ep.toString() + file.getName());
+			}
 			
 		}
 		return json;

@@ -63,6 +63,18 @@ public class ASBuiler
 		FileUtils.createProperty(asBuilderHome, "", "", projectID, isPatch, isUpdate, propOutputPath, version);
 		
 		
+		CreateAMF createAmf = new CreateAMF();
+		try 
+		{
+			createAmf.process(resBase);
+		} 
+		catch (Exception e1) 
+		{
+			System.out.println("Create AMF error!" + e1.getMessage());
+			e1.printStackTrace();
+			return;
+		}
+		
 		MD5Check MD5Check = new MD5Check();
 		try 
 		{

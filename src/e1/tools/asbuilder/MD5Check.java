@@ -23,18 +23,14 @@ public class MD5Check
 
 	public static void main(String[] args) 
 	{
-//		String path = args[0];
-//		String targetPath = args[1];
-//		boolean isUpdateReslist = args[2].equalsIgnoreCase("1");
-//		String reslistPath = args[3];
-		String path = "F:\\ASBuilder\\build\\betraygods\\main\\source\\res";
-		String targetPath = "F:\\ASBuilder\\build\\betraygods\\main\\deploy\\release";
-		boolean isUpdateReslist = true;
-		String reslistPath = "F:\\ASBuilder\\build\\betraygods\\main\\";
+		String path = args[0];
+		String targetPath = args[1];
+		boolean isUpdateReslist = args[2].equalsIgnoreCase("1");
+		String reslistPath = args[3];
 		
 		MD5Check MD5Check = new MD5Check();
 		try {
-			MD5Check.process(path, targetPath, isUpdateReslist, reslistPath, 100);
+			MD5Check.process(path, targetPath, isUpdateReslist, reslistPath, -1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -107,7 +103,7 @@ public class MD5Check
 			result = newFileMD5s;
 		}
 		merge(oldFileMD5s, result);
-		moveFiles(result, targetPath, isUpdate);
+		moveFiles(result, targetPath, isUpdate, buildversion);
 		
 		result = changeName2Amaf(oldFileMD5s);
 		
@@ -178,15 +174,18 @@ public class MD5Check
 	{
 		String fileName = resourcelistPath + "/";
 		String fileNameXml = resourcelistPath + "/";
+		String amfName = resourcelistPath + "/";
 		if (isUpdate)
 		{
 			fileName += ("reslist_v" + buildversion + ".json");
 			fileNameXml += ("reslist_v" + buildversion + ".xml");
+			amfName += ("reslist_v" + buildversion + ".eamf");
 		}
 		else
 		{
 			fileName += "reslist.json";
 			fileNameXml += "reslist.xml";
+			amfName += "reslist.eamf";
 		}
 		File file = new File(fileName);
 		if (!file.getParentFile().exists())
@@ -222,57 +221,66 @@ public class MD5Check
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		//XML
-		File fileXml = new File(fileNameXml);
-		if (!file.getParentFile().exists())
-		{
-			file.getParentFile().mkdir();
-		}
-		if (!file.exists())
-		{
-			file.createNewFile();
-		}
-		BufferedWriter writerXml = null;
-		StringBuilder reslstXml = new StringBuilder();
-
-		Iterator<String> itXml = result.keySet().iterator();
-
-		reslstXml.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-		reslstXml.append("\n");
-		reslstXml.append("<resources>\n");
-		while (itXml.hasNext())
-		{
-			key = itXml.next();
-			item = (JSONObject)result.get(key);
-			reslstXml.append("<resource id=\"");
-			reslstXml.append(item.getString(EJSON.ID));
-			reslstXml.append("\" version=\"");
-			reslstXml.append(item.getInt(EJSON.VERSION));
-			reslstXml.append("\" size=\"");
-			reslstXml.append(item.getInt(EJSON.SIZE));
-			reslstXml.append("\" />\n");
-		}
-		reslstXml.append("</resources>");
+		CreateAMF createAMF = new CreateAMF();
 		try 
 		{
-			writerXml = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(fileXml), "utf-8"));
-			writerXml.write(reslstXml.toString());
-			writerXml.flush();
+			createAMF.create(file, amfName);
 		} 
-		catch (UnsupportedEncodingException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (FileNotFoundException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
+		
+//		//XML
+//		File fileXml = new File(fileNameXml);
+//		if (!file.getParentFile().exists())
+//		{
+//			file.getParentFile().mkdir();
+//		}
+//		if (!file.exists())
+//		{
+//			file.createNewFile();
+//		}
+//		BufferedWriter writerXml = null;
+//		StringBuilder reslstXml = new StringBuilder();
+//
+//		Iterator<String> itXml = result.keySet().iterator();
+//
+//		reslstXml.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+//		reslstXml.append("\n");
+//		reslstXml.append("<resources>\n");
+//		while (itXml.hasNext())
+//		{
+//			key = itXml.next();
+//			item = (JSONObject)result.get(key);
+//			reslstXml.append("<resource id=\"");
+//			reslstXml.append(item.getString(EJSON.ID));
+//			reslstXml.append("\" version=\"");
+//			reslstXml.append(item.getInt(EJSON.VERSION));
+//			reslstXml.append("\" size=\"");
+//			reslstXml.append(item.getInt(EJSON.SIZE));
+//			reslstXml.append("\" />\n");
+//		}
+//		reslstXml.append("</resources>");
+//		try 
+//		{
+//			writerXml = new BufferedWriter(new OutputStreamWriter(
+//					new FileOutputStream(fileXml), "utf-8"));
+//			writerXml.write(reslstXml.toString());
+//			writerXml.flush();
+//		} 
+//		catch (UnsupportedEncodingException e) 
+//		{
+//			e.printStackTrace();
+//		} 
+//		catch (FileNotFoundException e) 
+//		{
+//			e.printStackTrace();
+//		} 
+//		catch (IOException e) 
+//		{
+//			e.printStackTrace();
+//		}
 	}
 
 	private void reWriteSrvResList(JSONObject result, String reslistName) 
@@ -337,7 +345,7 @@ public class MD5Check
 	 * @param isUpdate 是否更新版本文件，内网版本不更新
 	 */
 	@SuppressWarnings("unchecked")
-	private void moveFiles(JSONObject result, String targetPath, boolean isUpdate) 
+	private void moveFiles(JSONObject result, String targetPath, boolean isUpdate, int buildversion) 
 	{
 		Iterator<String> it = result.keySet().iterator();
 
@@ -357,7 +365,7 @@ public class MD5Check
 			simpleName = key.substring(0, index);
 			extName = key.substring(index, key.length());
 			
-			if (isUpdate)
+			if (isUpdate && buildversion != -1)
 			{
 				targetFileFullName = targetPath + "/" + simpleName + "_v" + tempValue.getInt(EJSON.VERSION) + extName;
 			}
