@@ -29,7 +29,7 @@ public class FileCopyer
 		} 
 		catch (Exception e) 
 		{
-			System.out.println("复制单个文件操作出错");
+			System.out.println("复制单个文件操作出错 " + srcFile.getName() + " " + destFile.getName());
 			e.printStackTrace();
 		}
 	}

@@ -77,12 +77,14 @@ public class MD5Check
 				if (key.endsWith("json"))
 				{
 					oldKey = key.replace("json", "eamf");
+					System.out.println(key + "为json文件，不做处理");
+					continue;
 				}
 				else
 				{
 					oldKey = key;
 				}
-				oldValue = (JSONObject)oldFileMD5s.get(oldKey);
+				oldValue = (JSONObject)oldFileMD5s.get(key);
 				if (oldValue == null) 
 				{
 					result.put(key, newValue);
@@ -361,6 +363,7 @@ public class MD5Check
 			String key = (String) it.next();
 			tempValue = (JSONObject)result.getJSONObject(key);
 			File file = new File(this.basePath + "/" + key);
+//			System.out.println("开始复制文件" + file.getName());
 			index = key.lastIndexOf(".");
 			simpleName = key.substring(0, index);
 			extName = key.substring(index, key.length());
@@ -380,6 +383,7 @@ public class MD5Check
 				parent.mkdirs();
 			}
 			FileCopyer.copyFile(file, targetFile);
+//			System.out.println("复制文件完毕" + file.getName());
 		}
 	}
 
