@@ -172,7 +172,12 @@ public class EffSynUI extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				process(e);
+				try {
+					process(e);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnSrc.addActionListener(new ActionListener() 
@@ -191,7 +196,7 @@ public class EffSynUI extends JPanel
 		});
 	}
 
-	private void process(ActionEvent e) 
+	private void process(ActionEvent e) throws IOException 
 	{
 		errorMsg.setLength(0);
 		datas.clear();
@@ -219,7 +224,7 @@ public class EffSynUI extends JPanel
 		txtError.setText(errorMsg.toString());
 	}
 	
-	private void prcocessFile(File srcFile)
+	private void prcocessFile(File srcFile) throws IOException
 	{
 		File file;
 		File[] files = srcFile.listFiles();

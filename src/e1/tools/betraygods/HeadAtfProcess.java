@@ -106,7 +106,7 @@ public class HeadAtfProcess {
 		reportError();
 	}
 	
-	private void processFile(File file)
+	private void processFile(File file) throws IOException
 	{
 		if (file.isFile())
 		{
@@ -237,7 +237,7 @@ public class HeadAtfProcess {
 		}
 	}
 	
-	private void copyFilesToSvn()
+	private void copyFilesToSvn() throws IOException
 	{
 		File destFile = new File(destPath);
 		File[] files = destFile.listFiles();

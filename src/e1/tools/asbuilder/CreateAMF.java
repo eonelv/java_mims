@@ -21,6 +21,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import e1.tools.lzma.sevenzip.compression.lzma.Encoder;
+import e1.tools.utils.FileCopyer;
 import flex.messaging.io.SerializationContext;
 import flex.messaging.io.amf.Amf3Output;
 
@@ -96,7 +97,6 @@ public class CreateAMF
 		String newFileFullName;
 		String oldFileName;
 		
-		Amf3Output out = null;
 		Object srcJson = null;
 		
 		File packFile = new File(outputPath + "/respack.amp");
@@ -152,7 +152,7 @@ public class CreateAMF
 	    byte[] input = byteOutPut.toByteArray();
 	    input = doCompressLzma(input);
 		encrypt.DoEncrypt(input, 0, input.length, false);
-		writeFile(file, input);
+		FileCopyer.writeFile(file, input);
 		return input;
 	}
 	
@@ -206,14 +206,6 @@ public class CreateAMF
 		inputStream.close();
 		   
 		return outStream.toByteArray();
-	}
-	
-	static private void writeFile(File file, byte[] datas) throws IOException
-	{
-		 DataOutputStream dataOutStream = new DataOutputStream(new FileOutputStream(file));
-		 dataOutStream.write(datas);
-		 dataOutStream.flush();
-		 dataOutStream.close();
 	}
 	
 	private Object readFile(File file) throws Exception 

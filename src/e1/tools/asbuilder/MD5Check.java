@@ -350,7 +350,7 @@ public class MD5Check
 	 * @param isUpdate 是否更新版本文件，内网版本不更新
 	 */
 	@SuppressWarnings("unchecked")
-	private void moveFiles(JSONObject result, String targetPath, boolean isUpdate, int buildversion) 
+	private void moveFiles(JSONObject result, String targetPath, boolean isUpdate, int buildversion) throws IOException 
 	{
 		Iterator<String> it = result.keySet().iterator();
 
@@ -361,6 +361,7 @@ public class MD5Check
 		int index;
 		JSONObject tempValue;
 		File parent;
+		String version;
 		
 		System.out.println("SysBuildMsg=4. begin copy file total " + result.size());
 		while (it.hasNext()) 
@@ -368,17 +369,19 @@ public class MD5Check
 			String key = (String) it.next();
 			tempValue = (JSONObject)result.getJSONObject(key);
 			File file = new File(this.basePath + "/" + key);
-//			System.out.println("开始复制文件" + file.getName());
+
 			index = key.lastIndexOf(".");
 			simpleName = key.substring(0, index);
 			extName = key.substring(index, key.length());
 			
 			if (isUpdate && buildversion != -1)
 			{
-				targetFileFullName = targetPath + "/" + simpleName + "_v" + tempValue.getInt(EJSON.VERSION) + extName;
+				version = "_v" + tempValue.getInt(EJSON.VERSION);
+				targetFileFullName = targetPath + "/" + simpleName + version + extName;
 			}
 			else
 			{
+				version = "";
 				targetFileFullName = targetPath + "/" + simpleName + extName;
 			}
 			targetFile = new File(targetFileFullName);
@@ -387,8 +390,14 @@ public class MD5Check
 			{
 				parent.mkdirs();
 			}
-			FileCopyer.copyFile(file, targetFile);
-//			System.out.println("复制文件完毕" + file.getName());
+			if (file.getName().startsWith("bg-main.atf"))
+			{
+				FileCopyer.copyFile(file, targetFile.getParent(), version, extName, true);
+			}
+			else
+			{
+				FileCopyer.copyFile(file, targetFile.getParent(), "", extName, false);
+			}
 		}
 	}
 
@@ -397,14 +406,6 @@ public class MD5Check
 		File file = new File(fileName);
 		if (!file.exists()) 
 		{
-//			try 
-//			{
-//				file.createNewFile();
-//			} 
-//			catch (IOException e) 
-//			{
-//				e.printStackTrace();
-//			}
 			return new JSONObject();
 		}
 		BufferedReader reader = null;

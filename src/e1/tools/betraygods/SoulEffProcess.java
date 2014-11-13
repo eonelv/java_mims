@@ -36,7 +36,12 @@ public class SoulEffProcess
 //		String destPath = "C:/Users/lv/Desktop/soul/test/";
 //		processor.svnPath = "C:/Users/lv/Desktop/soul/svn1/";
 
-		processor.process(srcPath, destPath);
+		try {
+			processor.process(srcPath, destPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String svnPath;
@@ -47,7 +52,7 @@ public class SoulEffProcess
 	public String atfToolPath = "E:/Projects/betraygods/resources/ui/deploy/png2atf.exe";//atf工具位置exe
 	public String textureToolPath = "F:/Flash/software/TexturePacker/bin/TexturePacker.exe";//atf工具位置exe
 	
-	public void process(String srcPath, String destPath)
+	public void process(String srcPath, String destPath) throws IOException
 	{
 		processes = new ArrayList<Process>();
 		this.srcPath = srcPath;
@@ -180,7 +185,7 @@ public class SoulEffProcess
 		}
 	}
 	
-	private void copyFilesToSvn()
+	private void copyFilesToSvn() throws IOException
 	{
 		File destFile = new File(destPath);
 		File[] files = destFile.listFiles();
@@ -207,7 +212,7 @@ public class SoulEffProcess
 		}
 	}
 	
-	private void innerProcessFiles(File file)
+	private void innerProcessFiles(File file) throws IOException
 	{
 		if (file.isDirectory())
 		{
