@@ -42,8 +42,8 @@ public class MD5Check
 		File parent = new File(this.basePath);
 		JSONObject newFileMD5s = new JSONObject();
 		JSONObject oldFileMD5s = null;
+		System.out.println("SysBuildMsg=4. begin calc MD5");
 		calMD5(parent, newFileMD5s, buildversion);
-
 //		if (isUpdate)
 //		{
 //			oldFileMD5s = readOldMD5(reslistPath + "/reslist_srv.json");
@@ -56,6 +56,7 @@ public class MD5Check
 		boolean isSuccess = oldFileMD5s != null;
 		
 
+		System.out.println("SysBuildMsg=4. comparing file's MD5");
 		JSONObject result = new JSONObject();
 		if (isSuccess) 
 		{
@@ -74,16 +75,16 @@ public class MD5Check
 				newValue = (JSONObject)newFileMD5s.get(key);
 				
 				//由于服务端保存的版本文件的key是eamf，所以这里需要替换json为eamf
-				if (key.endsWith("json"))
-				{
-					oldKey = key.replace("json", "eamf");
-					System.out.println(key + "为json文件，不做处理");
-					continue;
-				}
-				else
-				{
-					oldKey = key;
-				}
+//				if (key.endsWith("json"))
+//				{
+//					oldKey = key.replace("json", "eamf");
+//					System.out.println(key + "为json文件，不做处理");
+//					continue;
+//				}
+//				else
+//				{
+//					oldKey = key;
+//				}
 				oldValue = (JSONObject)oldFileMD5s.get(key);
 				if (oldValue == null) 
 				{
@@ -109,6 +110,7 @@ public class MD5Check
 		
 		result = changeName2Amaf(oldFileMD5s);
 		
+		System.out.println("SysBuildMsg=5. update version file");
 		/*
 		 * 如果是发布版本，需要生成reslist到编译环境及发布包中
 		 */
@@ -122,6 +124,7 @@ public class MD5Check
 			reWriteSrvResList(result, reslistPath + "/reslist_srv_inner.json");
 		}
 		reWriteClientResList(result, targetPath, isUpdate, buildversion);
+		System.out.println("SysBuildMsg=final. genaratting main application");
 	}
 	
 	/*
@@ -358,6 +361,8 @@ public class MD5Check
 		int index;
 		JSONObject tempValue;
 		File parent;
+		
+		System.out.println("SysBuildMsg=4. begin copy file total " + result.size());
 		while (it.hasNext()) 
 		{
 			String key = (String) it.next();

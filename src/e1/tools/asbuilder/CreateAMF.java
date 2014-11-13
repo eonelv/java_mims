@@ -101,6 +101,7 @@ public class CreateAMF
 		
 		File packFile = new File(outputPath + "/respack.amp");
 		dataPack = new DataOutputStream(new FileOutputStream(packFile));
+		System.out.println("SysBuildMsg=3. begin create amf file. total " + files.size());
 		while (itFiles.hasNext())
 		{
 			srcFile = itFiles.next();

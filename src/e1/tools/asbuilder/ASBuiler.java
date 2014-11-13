@@ -59,9 +59,11 @@ public class ASBuiler
 		boolean isPatch = patch.equalsIgnoreCase("1");
 		boolean isUpdate = update.equalsIgnoreCase("1");
 		
+		System.out.println("SysBuildMsg=1. updatting version");
 		int version = FileUtils.updateVersion(srcCodeBase);
-		FileUtils.createProperty(asBuilderHome, "", "", projectID, isPatch, isUpdate, propOutputPath, version);
 		
+		System.out.println("SysBuildMsg=2. creatting ant properties");
+		FileUtils.createProperty(asBuilderHome, "", "", projectID, isPatch, isUpdate, propOutputPath, version);
 		
 		CreateAMF createAmf = new CreateAMF();
 		try 
@@ -74,7 +76,7 @@ public class ASBuiler
 			e1.printStackTrace();
 			return;
 		}
-		
+		System.out.println("SysBuildMsg=3. create amf file success");
 		MD5Check MD5Check = new MD5Check();
 		try 
 		{
