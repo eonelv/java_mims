@@ -73,7 +73,7 @@ public class CreateAMF
 		createAMFFile(srcJson, encrypt, new File(fileName));
 	}
 	
-	private void collFiles(File file)
+	private void collFiles(File file) throws IOException
 	{
 		if (file.isDirectory())
 		{
@@ -87,6 +87,10 @@ public class CreateAMF
 		else if (file.getName().endsWith(".json"))
 		{
 			files.add(file);
+		}
+		else if (file.getName().startsWith("bg-main.atf"))
+		{
+			FileCopyer.copyFile(file, file.getParent(), "", ".atf", true);
 		}
 	}
 	

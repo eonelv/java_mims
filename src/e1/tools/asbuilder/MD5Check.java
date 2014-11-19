@@ -42,20 +42,14 @@ public class MD5Check
 		File parent = new File(this.basePath);
 		JSONObject newFileMD5s = new JSONObject();
 		JSONObject oldFileMD5s = null;
+		
 		System.out.println("SysBuildMsg=4. begin calc MD5");
 		calMD5(parent, newFileMD5s, buildversion);
-//		if (isUpdate)
-//		{
-//			oldFileMD5s = readOldMD5(reslistPath + "/reslist_srv.json");
-//		}
-//		else
-//		{
-//			oldFileMD5s = readOldMD5(reslistPath + "/reslist_srv_inner.json");
-//		}
+
+		System.out.println("SysBuildMsg=4. read old MD5");
 		oldFileMD5s = readOldMD5(reslistPath + "/reslist_srv.json");
 		boolean isSuccess = oldFileMD5s != null;
 		
-
 		System.out.println("SysBuildMsg=4. comparing file's MD5");
 		JSONObject result = new JSONObject();
 		if (isSuccess) 
@@ -108,23 +102,25 @@ public class MD5Check
 		merge(oldFileMD5s, result);
 		moveFiles(result, targetPath, isUpdate, buildversion);
 		
-		result = changeName2Amaf(oldFileMD5s);
+//		result = changeName2Amaf(oldFileMD5s);
 		
 		System.out.println("SysBuildMsg=5. update version file");
 		/*
 		 * 如果是发布版本，需要生成reslist到编译环境及发布包中
 		 */
+		String reslistMD5 = oldFileMD5s.toString();
 		if (isUpdate) 
 		{
-			reWriteSrvResList(result, reslistPath + "/reslist_srv.json");
-			reWriteSrvResListToClient(result, targetPath, buildversion);
+			reWriteSrvResList(reslistMD5, reslistPath + "/reslist_srv.json");
+			reWriteSrvResListToClient(reslistMD5, targetPath, buildversion);
 		}
 		else
 		{
-			reWriteSrvResList(result, reslistPath + "/reslist_srv_inner.json");
+			reWriteSrvResList(reslistMD5, reslistPath + "/reslist_srv_inner.json");
 		}
-		reWriteClientResList(result, targetPath, isUpdate, buildversion);
-		System.out.println("SysBuildMsg=final. genaratting main application");
+		reWriteClientResList(oldFileMD5s, targetPath, isUpdate, buildversion);
+		writeUpdateResList(result, targetPath, isUpdate, buildversion);
+		System.out.println("SysBuildMsg=final. generatting main application");
 	}
 	
 	/*
@@ -147,32 +143,110 @@ public class MD5Check
 		}
 	}
 	
+	private void calcFileCount(JSONObject newFileMD5s, String msg)
+	{
+		Iterator<String> it = newFileMD5s.keySet().iterator();
+		int count = 0;
+		String key;
+		while (it.hasNext()) 
+		{
+			key = (String) it.next();
+			count++;
+		}
+		System.out.println(msg + "   " + count);
+	}
+	
 	/*
 	 * 由于此时生成的版本文件，还没有eamf文件，需要提前将版本文件中的键值改为eamf. 
 	 * @param newFileMD5s
 	 * @return
 	 */
-	private JSONObject changeName2Amaf(JSONObject newFileMD5s)
+//	private JSONObject changeName2Amaf(JSONObject newFileMD5s)
+//	{
+//		@SuppressWarnings("unchecked")
+//		Iterator<String> it = newFileMD5s.keySet().iterator();
+//		JSONObject tempValue;
+//		String id;
+//		String key;
+//		JSONObject tempJsons= new JSONObject();
+//		while (it.hasNext()) 
+//		{
+//			key = (String) it.next();
+//			tempValue = (JSONObject)newFileMD5s.getJSONObject(key);
+//			id = tempValue.getString(EJSON.ID);
+////			if (id.endsWith("json"))
+////			{
+////				id = id.replace("json", "eamf");
+////			}
+//			tempValue.put(EJSON.ID, id);
+//			tempJsons.put(id, tempValue);
+//		}
+//		return tempJsons;
+//	}
+	
+	private void writeUpdateResList(JSONObject result, String resourcelistPath, boolean isUpdate, int buildversion) throws IOException
 	{
-		@SuppressWarnings("unchecked")
-		Iterator<String> it = newFileMD5s.keySet().iterator();
-		JSONObject tempValue;
-		String id;
-		String key;
-		JSONObject tempJsons= new JSONObject();
-		while (it.hasNext()) 
+		String fileNameXml = resourcelistPath + "/";
+		if (isUpdate)
 		{
-			key = (String) it.next();
-			tempValue = (JSONObject)newFileMD5s.getJSONObject(key);
-			id = tempValue.getString(EJSON.ID);
-			if (id.endsWith("json"))
-			{
-				id = id.replace("json", "eamf");
-			}
-			tempValue.put(EJSON.ID, id);
-			tempJsons.put(id, tempValue);
+			fileNameXml += ("updatereslist_v" + buildversion + ".xml");
 		}
-		return tempJsons;
+		else
+		{
+			fileNameXml += "updatereslist.xml";
+		}
+		File fileXml = new File(fileNameXml);
+		if (!fileXml.getParentFile().exists())
+		{
+			fileXml.getParentFile().mkdir();
+		}
+		if (!fileXml.exists())
+		{
+			fileXml.createNewFile();
+		}
+		BufferedWriter writerXml = null;
+		StringBuilder reslstXml = new StringBuilder();
+		String key = null;
+		JSONObject item = null;
+
+		Iterator<String> itXml = result.keySet().iterator();
+
+		reslstXml.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+		reslstXml.append("\n");
+		reslstXml.append("<resources>\n");
+		
+		while (itXml.hasNext())
+		{
+			key = itXml.next();
+			item = (JSONObject)result.get(key);
+			reslstXml.append("<resource id=\"");
+			reslstXml.append(item.getString(EJSON.ID));
+			reslstXml.append("\" version=\"");
+			reslstXml.append(item.getInt(EJSON.VERSION));
+			reslstXml.append("\" size=\"");
+			reslstXml.append(item.getInt(EJSON.SIZE));
+			reslstXml.append("\" />\n");
+		}
+		reslstXml.append("</resources>");
+		try 
+		{
+			writerXml = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(fileXml), "utf-8"));
+			writerXml.write(reslstXml.toString());
+			writerXml.flush();
+		} 
+		catch (UnsupportedEncodingException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void reWriteClientResList(JSONObject result, String resourcelistPath, boolean isUpdate, int buildversion) throws IOException 
@@ -288,18 +362,16 @@ public class MD5Check
 //		}
 	}
 
-	private void reWriteSrvResList(JSONObject result, String reslistName) 
+	private void reWriteSrvResList(String result, String reslistName) 
 	{
 		File file = new File(reslistName);
 		BufferedWriter writer = null;
-		StringBuilder reslst = new StringBuilder();
-
-		reslst.append(result.toString());
+		
 		try 
 		{
 			writer = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(file), "utf-8"));
-			writer.write(reslst.toString());
+			writer.write(result);
 			writer.flush();
 		} 
 		catch (UnsupportedEncodingException e) 
@@ -316,7 +388,7 @@ public class MD5Check
 		}
 	}
 	
-	private void reWriteSrvResListToClient(JSONObject result, String targetPath, int version) throws IOException 
+	private void reWriteSrvResListToClient(String result, String targetPath, int version) throws IOException 
 	{
 		String fileName = targetPath + "/";
 		fileName += ("reslist_srv_v" + version + ".json");
@@ -333,12 +405,10 @@ public class MD5Check
 
 		System.out.println("DEBUG::" + fileName);
 		BufferedWriter writer = null;
-		StringBuilder reslst = new StringBuilder();
 
-		reslst.append(result.toString());
 		writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(file), "utf-8"));
-		writer.write(reslst.toString());
+		writer.write(result);
 		writer.flush();
 	}
 
@@ -390,14 +460,7 @@ public class MD5Check
 			{
 				parent.mkdirs();
 			}
-			if (file.getName().startsWith("bg-main.atf"))
-			{
-				FileCopyer.copyFile(file, targetFile.getParent(), version, extName, true);
-			}
-			else
-			{
-				FileCopyer.copyFile(file, targetFile.getParent(), "", extName, false);
-			}
+			FileCopyer.copyFile(file, targetFile.getParent(), version, extName, false);
 		}
 	}
 

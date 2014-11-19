@@ -29,7 +29,9 @@ public class FileCopyer
 		InputStream inStream = new FileInputStream(srcFile); // 读入原文件
 		if (!isSplitting)
 		{
-			FileOutputStream fs = new FileOutputStream(new File(destParent + "/" + srcFile.getName()));
+			String name = srcFile.getName();
+			name = name.substring(0, name.length() - ext.length());
+			FileOutputStream fs = new FileOutputStream(new File(destParent + "/" + name + postFix + ext));
 			
 			while ((byteread = inStream.read(buffer)) != -1) 
 			{
