@@ -49,14 +49,16 @@ public class CreateAMF
 	private List<File> files = new ArrayList<File>();
 	private Encrypt encrypt;
 	private DataOutputStream dataPack;
+	private int partCount = 0;
 	
-	public void process(String srcFolderName) throws Exception
+	public int process(String srcFolderName) throws Exception
 	{
 		initEncrypt();
 		
 		File srcFolder = new File(srcFolderName);
 		collFiles(srcFolder);
 		processFiles(files, srcFolderName);
+		return partCount;
 	}
 	
 	private void initEncrypt()
@@ -90,7 +92,7 @@ public class CreateAMF
 		}
 		else if (file.getName().startsWith("bg-main.atf"))
 		{
-			FileCopyer.copyFile(file, file.getParent(), "", ".atf", true);
+			partCount = FileCopyer.copyFile(file, file.getParent(), "", ".atf", true);
 		}
 	}
 	
@@ -105,7 +107,7 @@ public class CreateAMF
 		
 		File packFile = new File(outputPath + "/respack.amp");
 		dataPack = new DataOutputStream(new FileOutputStream(packFile));
-		System.out.println("SysBuildMsg=3. begin create amf file. total " + files.size());
+		System.out.println("SysBuildMsg=1. begin create amf file. total " + files.size());
 		while (itFiles.hasNext())
 		{
 			srcFile = itFiles.next();

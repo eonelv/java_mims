@@ -6,6 +6,6 @@
 /*    */ {
 /*    */   public static void main(String[] args)
 /*    */   {
-/* 14 */     FileUtils.updateVersion(args[0]);
+/* 14 */     FileUtils.updateVersion(args[0], 1);
 /*    */   }
 /*    */ }

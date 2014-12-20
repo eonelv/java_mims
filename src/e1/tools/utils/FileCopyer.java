@@ -9,20 +9,21 @@ import java.io.InputStream;
 
 public class FileCopyer 
 {
-	public static void copyFile(File srcFile, File destFile) throws IOException 
+	public static int copyFile(File srcFile, File destFile) throws IOException 
 	{
-		copyFile(srcFile, destFile.getParent(), "", "", false);
+		return copyFile(srcFile, destFile.getParent(), "", "", false);
 	}
 	
-	public static void copyFile(File srcFile, String destParent, String postFix, String ext, boolean isSplitting) throws IOException 
+	public static int copyFile(File srcFile, String destParent, String postFix, String ext, boolean isSplitting) throws IOException 
 	{
 		if (srcFile == null) 
 		{
-			return;
+			return 1;
 		}
 		
 		int byteread = 0;
 		int byteReadTotal = 0;
+		int partCount = 1;
 	
 		byte[] buffer = new byte[1024];
 		
@@ -52,6 +53,7 @@ public class FileCopyer
 				if (isNeedNew)
 				{
 					fs = new FileOutputStream(new File(destParent + "/" + name + ".part" + partIndex + postFix + ext));
+					partCount++;
 					isNeedNew = false;
 				}
 				fs.write(buffer, 0, byteread);
@@ -69,6 +71,7 @@ public class FileCopyer
 			fs.close();
 			inStream.close();
 		}
+		return partCount;
 	}
 	
 	public static void writeFile(File file, byte[] datas) throws IOException

@@ -15,7 +15,7 @@ public class FileUtils
 {
 	private static StringBuilder log = new StringBuilder("");
 
-	public static int updateVersion(String path) 
+	public static int updateVersion(String path, int partCount) 
 	{
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String now = format.format(new Date());
@@ -43,6 +43,7 @@ public class FileUtils
 			sbAs.append(
 					"\t\tstatic public const VERSION:String = \"V: " + version
 							+ " \";").append("\n");
+			sbAs.append("\t\tstatic public const MAIN_PARTCOUNT:int = " + partCount + ";").append("\n");
 			sbAs.append("\t}").append("\n");
 			sbAs.append("}");
 
@@ -98,8 +99,6 @@ public class FileUtils
 							"utf-8"));
 			writer.write(sbAs.toString());
 			writer.flush();
-
-			System.out.println("JAVA::build.bat鍒涘缓瀹屾垚");
 		} catch (FileNotFoundException e) {
 			log.append("ERROR:" + e.toString()).append("\r\n");
 			try {

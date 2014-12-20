@@ -99,6 +99,18 @@ public class MD5Check
 		{
 			result = newFileMD5s;
 		}
+		
+		//如果是内网版本，需要将MD5对比的结果跟原来保存的更新列表合并（每次发布外网，内网的更新列表会清空）
+		if (!isUpdate) 
+		{
+			JSONObject innerJson = readOldMD5(reslistPath + "/reslist_srv_inner.json");
+			
+			merge(innerJson, result);
+			result = innerJson;
+			String innerMD5 = result.toString();
+			reWriteSrvResList(innerMD5, reslistPath + "/reslist_srv_inner.json");
+		}
+		
 		merge(oldFileMD5s, result);
 		moveFiles(result, targetPath, isUpdate, buildversion);
 		
@@ -112,12 +124,13 @@ public class MD5Check
 		if (isUpdate) 
 		{
 			reWriteSrvResList(reslistMD5, reslistPath + "/reslist_srv.json");
+			reWriteSrvResList("{}", reslistPath + "/reslist_srv_inner.json");
 			reWriteSrvResListToClient(reslistMD5, targetPath, buildversion);
 		}
-		else
-		{
-			reWriteSrvResList(reslistMD5, reslistPath + "/reslist_srv_inner.json");
-		}
+//		else
+//		{
+//			reWriteSrvResList(reslistMD5, reslistPath + "/reslist_srv_inner.json");
+//		}
 		reWriteClientResList(oldFileMD5s, targetPath, isUpdate, buildversion);
 		writeUpdateResList(result, targetPath, isUpdate, buildversion);
 		System.out.println("SysBuildMsg=final. generatting main application");
