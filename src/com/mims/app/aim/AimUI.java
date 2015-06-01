@@ -16,6 +16,7 @@ import com.mims.app.test.TblTestUI;
 import com.mims.core.CoreUI;
 import com.mims.core.IUIHelper;
 import com.mims.core.JFFrame;
+import com.mims.core.TreeNodeInfo;
 import com.mims.core.UIFactory;
 import com.mims.swing.ctrl.JFTabbedPaneManager;
 import com.mims.swing.ctrl.JFTree;
@@ -60,16 +61,16 @@ public class AimUI extends CoreUI
 		menuTree.setBorder(new JFBorders.TextFieldBorder());
 		DefaultMutableTreeNode nodeAcco = new DefaultMutableTreeNode();
 		TreeNodeInfo nodeAccoInfo = new TreeNodeInfo();
-		nodeAccoInfo.setName("ÕËºÅ");
-		nodeAccoInfo.setUiName("²éÑ¯");
+		nodeAccoInfo.setName("ï¿½Ëºï¿½");
+		nodeAccoInfo.setUiName("ï¿½ï¿½Ñ¯");
 		nodeAcco.setUserObject(nodeAccoInfo);
 		
 				
 		DefaultTreeModel model = (DefaultTreeModel)menuTree.getModel();
 		DefaultMutableTreeNode nodeView = new DefaultMutableTreeNode();
 		TreeNodeInfo node = new TreeNodeInfo();
-		node.setName("ÕËºÅ²éÑ¯  - ´´½¨ÐÂÒ³Ç©");
-		node.setUiName("²éÑ¯");
+		node.setName("ï¿½ËºÅ²ï¿½Ñ¯  - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³Ç©");
+		node.setUiName("ï¿½ï¿½Ñ¯");
 		node.setClassName(AimListUI.class.getName());
 		node.setModel(IUIHelper.UIMODEL_NEWTAB);
 		nodeView.setUserObject(node);
@@ -78,8 +79,8 @@ public class AimUI extends CoreUI
 		
 		DefaultMutableTreeNode nodeProcess = new DefaultMutableTreeNode();
 		TreeNodeInfo nodePocs = new TreeNodeInfo();
-		nodePocs.setName("ÕËºÅ´¦Àí - ´´½¨ÐÂ´°¿Ú");
-		nodePocs.setUiName("´¦Àí");
+		nodePocs.setName("ï¿½ËºÅ´ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½");
+		nodePocs.setUiName("ï¿½ï¿½ï¿½ï¿½");
 		nodePocs.setClassName(AimProcessUI.class.getName());
 		nodePocs.setModel(IUIHelper.UIMODEL_NEWWIN);
 		nodeProcess.setUserObject(nodePocs);
@@ -90,18 +91,18 @@ public class AimUI extends CoreUI
 		DefaultMutableTreeNode nodeTbl = new DefaultMutableTreeNode();
 		TreeNodeInfo nodeTblInfo = new TreeNodeInfo();
 		nodeTblInfo.setName("Table");
-		nodeTblInfo.setUiName("²éÑ¯");
+		nodeTblInfo.setUiName("ï¿½ï¿½Ñ¯");
 		nodeTblInfo.setClassName(TblTestUI.class.getName());
 		nodeTblInfo.setModel(IUIHelper.UIMODEL_NEWTAB);
 		nodeTbl.setUserObject(nodeTblInfo);
 		
 		/**
-		 * Dialog²âÊÔ
+		 * Dialogï¿½ï¿½ï¿½ï¿½
 		 */
 		DefaultMutableTreeNode nodeDialog = new DefaultMutableTreeNode();
 		TreeNodeInfo nodeDialogInfo = new TreeNodeInfo();
-		nodeDialogInfo.setName("Dialog - ´´½¨ÐÂ¶Ô»°¿ò");
-		nodeDialogInfo.setUiName("Dialog²âÊÔ  - ´´½¨ÐÂ¶Ô»°¿ò");
+		nodeDialogInfo.setName("Dialog - ï¿½ï¿½ï¿½ï¿½ï¿½Â¶Ô»ï¿½ï¿½ï¿½");
+		nodeDialogInfo.setUiName("Dialogï¿½ï¿½ï¿½ï¿½  - ï¿½ï¿½ï¿½ï¿½ï¿½Â¶Ô»ï¿½ï¿½ï¿½");
 		nodeDialogInfo.setClassName(TblTestUI.class.getName());
 		nodeDialogInfo.setModel(IUIHelper.UIMODEL_NEWDIA);
 		nodeDialog.setUserObject(nodeDialogInfo);

@@ -7,12 +7,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.KeyboardFocusManager;
 
 import javax.swing.plaf.metal.MetalBorders.Flush3DBorder;
 import javax.swing.text.JTextComponent;
 
-import com.mims.swing.ctrl.JFSpinner;
 import com.mims.swing.ctrl.SwingConst;
 import com.mims.swing.ctrl.util.UIDrawer;
 
@@ -38,12 +36,14 @@ public class JFBorders
 		public void paintBorder(Component c, Graphics g, int x, int y, int w,
 				int h)
 		{
+			//会导致CPU上升非常多
 			if (c.hasFocus())
 			{
 				c.repaint();
 
 				UIDrawer.draw3DBorderFocus(g, x, y, w, h);
-			} else
+			} 
+			else
 			{
 				if (!(c instanceof JTextComponent))
 				{
@@ -60,7 +60,8 @@ public class JFBorders
 				if (c.isEnabled() && ((JTextComponent) c).isEditable())
 				{
 					UIDrawer.draw3DBorderNormal(g, x, y, w, h);
-				} else
+				} 
+				else
 				{
 					UIDrawer.draw3DBorderDisable(g, x, y, w, h);
 				}

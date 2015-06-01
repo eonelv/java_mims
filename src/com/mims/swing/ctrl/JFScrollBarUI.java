@@ -74,7 +74,8 @@ public class JFScrollBarUI extends BasicScrollBarUI
 		{
 			paintThumb(g, c, thumbBounds);
 		}
-		c.repaint();
+		super.paint(g, c);
+//		c.repaint();
 	}
 
 	protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds)

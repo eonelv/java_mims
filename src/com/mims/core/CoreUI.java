@@ -20,17 +20,17 @@ import com.mims.swing.ctrl.JFToolButton;
 import com.mims.swing.ctrl.util.ResourceUtils;
 
 /**
- * ÃèÊö:.<p>
+ * ï¿½ï¿½ï¿½ï¿½:.<p>
  *
- * @author ÀîÍş 
+ * @author ï¿½ï¿½ï¿½ï¿½ 
  *
  * @Date: 2011-7-22
  * 
  */
 /**
- * ÃèÊö:.<p>
+ * ï¿½ï¿½ï¿½ï¿½:.<p>
  *
- * @author ÀîÍş 
+ * @author ï¿½ï¿½ï¿½ï¿½ 
  *
  * @Date: 2011-7-24
  * 
@@ -72,41 +72,23 @@ public class CoreUI extends JFPanel implements IUIHelper
 	
 	private void initToolsAndMenus()
 	{
-		btnExit = new JFToolButton("ÍË³ö");
+		btnExit = new JFToolButton("æ–‡ä»¶");
 
-		tools.add(new JFToolButton("ÍË³ö---1", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---2", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---3", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---4", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---5", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---6", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---7", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---8", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---9", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---0", ResourceUtils.getIcon("folder_close.png")));
-		tools.add(new JFToolButton("ÍË³ö---A", ResourceUtils.getIcon("folder_close.png")));
+		tools.add(new JFToolButton("æŒ‰é’®", ResourceUtils.getIcon("folder_close.png")));
 		
 		tools.add(btnExit);
 		
-		menuFile = new JFMenu("ÎÄ¼ş");
-		muneItemExit = new JFMenuItem("ÍË³ö");
+		menuFile = new JFMenu("æ–‡ä»¶");
+		muneItemExit = new JFMenuItem("ä¿å­˜");
 		
 		menuFile.add(muneItemExit);
-		menuFile.add(new JFMenuItem("ÍË³ö---A"));
+		menuFile.add(new JFMenuItem("é€€å‡º"));
 		
-		menuAbout = new JFMenu("¹ØÓÚ", ResourceUtils.getIcon("query_16.png"));
-		menuAbout.add(new JFMenuItem("¹ØÓÚ×÷Õß", ResourceUtils.getIcon("query_16.png")));
-		menuAbout.add(new JFMenuItem("¹ØÓÚ³ÌĞò", ResourceUtils.getIcon("folder_close.png")));
-		menuAbout.add(new JFCheckBoxMenuItem("Ñ¡ÖĞ"));
+		menuAbout = new JFMenu("å…³äº", ResourceUtils.getIcon("query_16.png"));
+		menuAbout.add(new JFMenuItem("æµ‹è¯•", ResourceUtils.getIcon("query_16.png")));		
 		
-		JFMenu menu = new JFMenu("D");
-		menu.add(new JFMenuItem("D-1"));
-		menu.add(new JFMenuItem("D--2"));
-		
-		
-		btnExit.add(new JFMenuItem("µ¯³ö0", ResourceUtils.getIcon("query_16.png")));
-		btnExit.add(new JFMenuItem("µ¯³ö1"));
-		btnExit.add(menu);
+		btnExit.add(new JFMenuItem("é€€å‡º", ResourceUtils.getIcon("query_16.png")));
+		btnExit.add(new JFMenuItem("é€€å‡º"));
 		menus.add(menuFile);
 		menus.add(menuAbout);
 		

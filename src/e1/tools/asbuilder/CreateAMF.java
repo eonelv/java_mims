@@ -36,7 +36,7 @@ public class CreateAMF
 		System.out.println(args[0]);
 		CreateAMF amf = new CreateAMF();
 		try {
-			amf.process(args[0]);
+			amf.process("C:\\Users\\lv\\Desktop\\1");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,9 +90,11 @@ public class CreateAMF
 		{
 			files.add(file);
 		}
-		else if (file.getName().startsWith("bg-main.atf"))
+		else if (file.getName().startsWith("bg-main.atf") || file.getName().startsWith("bg-main.tamf"))
 		{
-			partCount = FileCopyer.copyFile(file, file.getParent(), "", ".atf", true);
+			int index = file.getName().lastIndexOf('.');
+			String ext = file.getName().substring(index);
+			partCount = FileCopyer.copyFile(file, file, "", ext, true);
 		}
 	}
 	
@@ -291,15 +293,48 @@ public class CreateAMF
 				int index = content.indexOf("[");
 				int lastIndex = content.lastIndexOf("]");
 				content = content.substring(index + 1, lastIndex);
-				String []arr = content.split(",");
+				String []arr = content.split("\\|");
 				int nameLength = arr.length;
 				String name;
+				Map<String, Integer> allNames = new HashMap<String, Integer>();
 				for (int i = 0; i < nameLength; i++)
 				{
 					name = arr[i];
-					arr[i] = name.substring(1, name.length() - 1);
+					name = name.trim();
+					if (name.contains("，"))
+					{
+						System.out.println(name);
+					}
+					if (name.startsWith("\""))
+					{
+						name = name.substring(1, name.length());
+					}
+					if (name.endsWith("\""))
+					{
+						name = name.substring(0, name.length() - 1);
+					}
+					if (!allNames.containsKey(name))
+					{
+						allNames.put(name, 1);
+					}
+//					arr[i] = name;
 				}
-				json = arr;
+				System.out.println(arr.length);
+				Iterator<String> itNames = allNames.keySet().iterator();
+				List<String> nameList = new ArrayList<String>();
+				String key = null;
+				while (itNames.hasNext())
+				{
+					key = itNames.next();
+					if (key == null || key.equalsIgnoreCase("") || key.length() == 0)
+					{
+						continue;
+					}
+					nameList.add(key);
+				}
+				json = nameList.toArray();
+				System.out.println(nameList.size());
+				
 			}
 			catch (Exception ep)
 			{

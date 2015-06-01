@@ -14,8 +14,8 @@ import java.util.Iterator;
 
 import net.sf.json.JSONObject;
 import e1.tools.asbuilder.utils.EJSON;
-import e1.tools.asbuilder.utils.MD5Utils;
 import e1.tools.utils.FileCopyer;
+import e1.tools.utils.MD5Utils;
 
 public class MD5Check 
 {
@@ -29,11 +29,16 @@ public class MD5Check
 		String reslistPath = args[3];
 		
 		MD5Check MD5Check = new MD5Check();
-		try {
+		try 
+		{
 			MD5Check.process(path, targetPath, isUpdateReslist, reslistPath, -1);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("error::" + e.getMessage());
+			System.out.println(e);
 		}
+		System.out.println("ASBuilder::End");
 	}
 
 	public void process(String path, String targetPath, boolean isUpdate, String reslistPath, int buildversion) throws IOException 
@@ -453,6 +458,11 @@ public class MD5Check
 			tempValue = (JSONObject)result.getJSONObject(key);
 			File file = new File(this.basePath + "/" + key);
 
+			if (!file.exists())
+			{
+				System.out.println("Move file::not exist " + file.getName());
+				continue;
+			}
 			index = key.lastIndexOf(".");
 			simpleName = key.substring(0, index);
 			extName = key.substring(index, key.length());
@@ -473,7 +483,7 @@ public class MD5Check
 			{
 				parent.mkdirs();
 			}
-			FileCopyer.copyFile(file, targetFile.getParent(), version, extName, false);
+			FileCopyer.copyFile(file, targetFile, version, extName, false);
 		}
 	}
 

@@ -129,8 +129,6 @@ public class JFToolButtonUI extends BasicButtonUI
 		}
 		if (model.isEnabled())
 		{
-			Font font = new Font("Serif", Font.BOLD, 13);
-			g.setFont(font);
 			SwingUtilities2.drawStringUnderlineCharAt(c, g, text,
 					mnemonicIndex, temp, textRect.y + fm.getAscent()
 							+ getTextShiftOffset());

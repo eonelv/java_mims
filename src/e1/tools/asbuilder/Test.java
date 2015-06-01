@@ -13,7 +13,9 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 		
-		
+		String name = "a.tamf";
+		int index = name.lastIndexOf('.');
+		System.out.println(name.substring(index));
 	}
 
 }

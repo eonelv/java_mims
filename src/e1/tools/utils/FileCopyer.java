@@ -11,16 +11,17 @@ public class FileCopyer
 {
 	public static int copyFile(File srcFile, File destFile) throws IOException 
 	{
-		return copyFile(srcFile, destFile.getParent(), "", "", false);
+		return copyFile(srcFile, destFile, "", "", false);
 	}
 	
-	public static int copyFile(File srcFile, String destParent, String postFix, String ext, boolean isSplitting) throws IOException 
+	public static int copyFile(File srcFile, File destFile, String postFix, String ext, boolean isSplitting) throws IOException 
 	{
 		if (srcFile == null) 
 		{
 			return 1;
 		}
 		
+		String destParent = destFile.getParent();
 		int byteread = 0;
 		int byteReadTotal = 0;
 		int partCount = 1;
@@ -30,7 +31,7 @@ public class FileCopyer
 		InputStream inStream = new FileInputStream(srcFile); // 读入原文件
 		if (!isSplitting)
 		{
-			String name = srcFile.getName();
+			String name = destFile.getName();
 			name = name.substring(0, name.length() - ext.length());
 			FileOutputStream fs = new FileOutputStream(new File(destParent + "/" + name + postFix + ext));
 			
@@ -45,7 +46,7 @@ public class FileCopyer
 		{
 			int partIndex = 0;
 			boolean isNeedNew = false;
-			String name = srcFile.getName();
+			String name = destFile.getName();
 			name = name.substring(0, name.length() - ext.length());
 			FileOutputStream fs = new FileOutputStream(new File(destParent + "/" + name + ".part" + partIndex + postFix + ext));
 			while ((byteread = inStream.read(buffer)) != -1) 

@@ -39,32 +39,32 @@ public class JFTabbedPaneUI extends MetalTabbedPaneUI
 
 	private static Logger logger = LogSystem.getLogger(JFTabbedPaneUI.class);
 	/**
-	 * Ã¿¸öÒ³Ç©ÊÇ·ñ¿É¼û
+	 * Ã¿ï¿½ï¿½Ò³Ç©ï¿½Ç·ï¿½É¼ï¿½
 	 */
 	private boolean[] isTabVisiable = new boolean[0];
 
 	/**
-	 * ¿ªÊ¼¿É¼ûµÄÎ»ÖÃ
+	 * ï¿½ï¿½Ê¼ï¿½É¼ï¿½ï¿½Î»ï¿½ï¿½
 	 */
 	private int visiableBegin = -1;
 
 	/**
-	 * ×îºó¿É¼ûµÄÎ»ÖÃ
+	 * ï¿½ï¿½ï¿½É¼ï¿½ï¿½Î»ï¿½ï¿½
 	 */
 	private int visiableEnd = -1;
 
 	/**
-	 * ÉÏ´Î´°¿Ú´óÐ¡
+	 * ï¿½Ï´Î´ï¿½ï¿½Ú´ï¿½Ð¡
 	 */
 	private Dimension oldWinSize = new Dimension(0, 0);
 
 	/**
-	 * ÊÇ·ñ´´½¨ÁË°´Å¥
+	 * ï¿½Ç·ñ´´½ï¿½ï¿½Ë°ï¿½Å¥
 	 */
 	private boolean isCreateBtn = false;
 	
 	/**
-	 * °´Å¥ÇøÓò¿í¶È
+	 * ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private int btn_width = 249;
 	
@@ -109,7 +109,6 @@ public class JFTabbedPaneUI extends MetalTabbedPaneUI
 	{
 		if (!isCreateBtn)
 		{
-			logger.info("createButton");
 			Icon icon_left_24 = ResourceUtils.getIcon("left_24.png");
 			Icon icon_left_16 = ResourceUtils.getIcon("left_16.png");
 			Icon icon_right_16 = ResourceUtils.getIcon("right_16.png");

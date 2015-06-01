@@ -6,16 +6,13 @@ package com.mims.swing.ctrl.util;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 
 import javax.swing.JComponent;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import com.mims.swing.ctrl.SwingConst;
 
@@ -56,8 +53,7 @@ public class UIDrawer
 		g2.setStroke(stroke);
 		
 		g2.setColor(SwingConst.EDITOR_FOCUS_BORDER_COLOR);
-		g2.drawRect(x + 1, y + 1, w - 2, h - 3);
-		
+		g2.drawRect(x + 2, y + 2, w - 3, h - 3);
 		
 
 		g2.translate(-x, -y);

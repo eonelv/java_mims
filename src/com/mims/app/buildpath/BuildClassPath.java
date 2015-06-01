@@ -63,17 +63,17 @@ public class BuildClassPath extends JFrame {
 		bar = new JFMenuBar();
 		
 		setJMenuBar(bar);
-		JFMenu menu = new JFMenu("选择");
+		JFMenu menu = new JFMenu("閫夋嫨");
 		bar.add(menu);
-		menu.add(new JFMenuItem("选择"));
+		menu.add(new JFMenuItem("閫夋嫨"));
 		
 		field = new JFTextField();
 		field.setEditable(false);
-//		selectBtn = new JButton("ѡ��");
-		selectBtn = new JFButton("选择");
+//		selectBtn = new JButton("选锟斤拷");
+		selectBtn = new JFButton("閫夋嫨");
 		
-		addBtn = new JFButton("添加");
-		submitBtn = new JFButton("生成");
+		addBtn = new JFButton("娣诲姞");
+		submitBtn = new JFButton("鐢熸垚");
 		listDirs = new JFList();
 		model = new DefaultListModel();
 		listDirs.setModel(model);
@@ -144,12 +144,12 @@ public class BuildClassPath extends JFrame {
 		}
 	}
 	private void selectActionPerformanced(ActionEvent e) {
-		fileChooser.setFileSelectionMode(1);// �趨ֻ��ѡ���ļ���
-		int state = fileChooser.showOpenDialog(null);// �˾��Ǵ��ļ�ѡ��������Ĵ������
+		fileChooser.setFileSelectionMode(1);// 锟借定只锟斤拷选锟斤拷锟侥硷拷锟斤拷
+		int state = fileChooser.showOpenDialog(null);// 锟剿撅拷锟角达拷锟侥硷拷选锟斤拷锟斤拷锟斤拷锟斤拷拇锟斤拷锟斤拷锟斤拷
 		if (state == 1) {
-			return;// �����򷵻�
+			return;// 锟斤拷锟斤拷锟津返伙拷
 		} else {
-			File file = fileChooser.getSelectedFile();// fΪѡ�񵽵�Ŀ¼
+			File file = fileChooser.getSelectedFile();// f为选锟今到碉拷目录
 			field.setText(file.getAbsolutePath());
 		}
 
@@ -159,7 +159,7 @@ public class BuildClassPath extends JFrame {
 //		String filePath = field.getText();
 		if (dirSet == null || dirSet.isEmpty()) {
 			JOptionPane.showMessageDialog(null,
-					"��ѡ��һ��Ŀ¼", "����bat", JOptionPane.INFORMATION_MESSAGE);
+					"锟斤拷选锟斤拷一锟斤拷目录", "锟斤拷锟斤拷bat", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		StringBuffer classpath = new StringBuffer();
@@ -209,24 +209,24 @@ public class BuildClassPath extends JFrame {
 			out.write(content.getBytes());
 			out.close();
 			JOptionPane.showMessageDialog(null,
-					"�������", "����bat", JOptionPane.INFORMATION_MESSAGE);
+					"锟斤拷锟斤拷锟斤拷锟�", "锟斤拷锟斤拷bat", JOptionPane.INFORMATION_MESSAGE);
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
-					e, "����bat", JOptionPane.ERROR_MESSAGE);
+					e, "锟斤拷锟斤拷bat", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null,
-					e, "����bat", JOptionPane.ERROR_MESSAGE);
+					e, "锟斤拷锟斤拷bat", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
 
 
 	/**
-	 * @������.<p>
+	 * @锟斤拷锟斤拷锟斤拷.<p>
 	 * 
-	 * @author ����
+	 * @author 锟斤拷锟斤拷
 	 * 
-	 * @Date��2011-4-3
+	 * @Date锟斤拷2011-4-3
 	 * 
 	 * @param args
 	 */

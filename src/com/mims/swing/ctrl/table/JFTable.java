@@ -15,10 +15,10 @@ import javax.swing.table.TableColumnModel;
 import com.mims.swing.ctrl.SwingConst;
 
 /**
- * ÃèÊö:.
+ * ï¿½ï¿½ï¿½ï¿½:.
  * <p>
  * 
- * @author ÀîÍş
+ * @author ï¿½ï¿½ï¿½ï¿½
  * 
  * @Date: 2011-8-5
  * 

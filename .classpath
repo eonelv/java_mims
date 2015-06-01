@@ -14,9 +14,10 @@
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.0.8-bin.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/Adobe Flash Builder 4.7 (64 Bit)"/>
 	<classpathentry kind="lib" path="lib/flex-messaging-common.jar"/>
 	<classpathentry kind="lib" path="lib/flex-messaging-core.jar"/>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.15-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/Adobe Flash Builder 4.7 (64 Bit)"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
